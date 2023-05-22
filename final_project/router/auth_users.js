@@ -68,27 +68,16 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
                     return res.status(200).send(`A review with an ISBN ${isbn} has been added/updated`);
                 }
             }
-            if (matchingUsers.length < 0) {
-                let rev = {
-                    1 : {username, review}
-                }
-                reviews.push(rev);
-                console.log(book)
+            if (matchingUsers.length <= 0) {
+                reviews[username] = review;
                 books[isbn].reviews = reviews;
-            } else {
-                for (let i = 0; i < reviews.length; i++) {
-                    if (reviews[i][0] == req.session.username) {
-                        reviews[i][1] = review;
-                        books[isbn].reviews = reviews;
-                        return res.status(200).send(`A review with an ISBN ${isbn} has been added/updated`);
-                    }
-                }
+                console.log(books[isbn]);
             }
         } else {
             // let rev = {
             //     1 : {username, review}
             // }
-            reviews.username = review;
+            reviews[username] = review;
             books[isbn].reviews = reviews;
             console.log(books[isbn]);
         }
@@ -96,6 +85,17 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     }
     return res.status(200).send("There was an Error");
 });
+
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    let isbn = req.params.isbn;
+    let book = books[isbn];
+    if (book) {
+        console.log(req.session.authorization.username);
+        let username = req.session.authorization.username;
+        let reviews = book.reviews
+    }
+});
+
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
