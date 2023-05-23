@@ -32,57 +32,79 @@ public_users.post("/register", (req,res) => {
 
 
 // Get the book list available in the shop
-let myPromise1 = new Promise((resolve,reject) => {
+let myPromise1 = new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve("Promise 1 resolved")
-    },2000)})
-
-public_users.get('/',function (req, res) {
-  //Write your code here
-  myPromise1.then((successMessage) => {
-    console.log("From Callback " + successMessage)
-    return res.send(JSON.stringify({books},null,4));
-  })
-  return res.send(JSON.stringify({books},null,4));
-//   return res.status(300).json({message: "Yet to be implemented"});
+      resolve("Promise 1 resolved");
+    }, 6000);
+  });
+  
+public_users.get('/', function (req, res) {
+    myPromise1.then((successMessage) => {
+        console.log("From Callback " + successMessage);
+        return res.send(JSON.stringify({ books }, null, 4));
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        return res.status(500).json({ message: 'Failed to retrieve books' });
+    });
 });
 
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
-  let is = req.params.isbn;
-  return res.send(books[is]);
- });
-  
+    myPromise1.then((successMessage) => {
+        console.log("From Callback " + successMessage);
+        let is = req.params.isbn;
+        return res.send(books[is]);
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        return res.status(500).json({ message: 'Failed to retrieve book'});
+    });
+});
+
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  const author = req.params.author;
-  const bookKeys = Object.keys(books);
-  const matchingBooks = [];
-  for (const key of bookKeys) {
-    const book = books[key];
-    if (book.author === author) {
-      matchingBooks.push(book);
-    }
-  }
-  res.send(matchingBooks);
+    myPromise1.then((successMessage) => {
+        console.log("From Callback " + successMessage);
+        const author = req.params.author;
+        const bookKeys = Object.keys(books);
+        const matchingBooks = [];
+        for (const key of bookKeys) {
+            const book = books[key];
+            if (book.author === author) {
+                matchingBooks.push(book);
+            }
+        }
+        res.send(matchingBooks);
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        return res.status(500).json({ message: 'Failed to retrieve book'});
+    });
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
-  const title = req.params.title;
-  const bookKeys = Object.keys(books);
-  const matchingBooks = [];
-  for (const key of bookKeys) {
-    const book = books[key];
-    if (book.title === title) {
-      matchingBooks.push(book);
-    }
-  }
-  res.send(matchingBooks);
+    myPromise1.then((successMessage) => {
+        console.log("From Callback " + successMessage);
+        const title = req.params.title;
+        const bookKeys = Object.keys(books);
+        const matchingBooks = [];
+        for (const key of bookKeys) {
+            const book = books[key];
+            if (book.title === title) {
+                matchingBooks.push(book);
+            }
+        }
+        res.send(matchingBooks);
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        return res.status(500).json({ message: 'Failed to retrieve book'});
+    });
 });
 
 //  Get book review
