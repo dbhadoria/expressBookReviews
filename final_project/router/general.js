@@ -29,12 +29,24 @@ public_users.post("/register", (req,res) => {
     return res.status(404).json({message: "Unable to register user."});
 });
 
+
+
 // Get the book list available in the shop
+let myPromise1 = new Promise((resolve,reject) => {
+    setTimeout(() => {
+      resolve("Promise 1 resolved")
+    },2000)})
+
 public_users.get('/',function (req, res) {
   //Write your code here
+  myPromise1.then((successMessage) => {
+    console.log("From Callback " + successMessage)
+    return res.send(JSON.stringify({books},null,4));
+  })
   return res.send(JSON.stringify({books},null,4));
 //   return res.status(300).json({message: "Yet to be implemented"});
 });
+
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
